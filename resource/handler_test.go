@@ -4,8 +4,8 @@ import (
 	"net/http"
 	"testing"
 
-	ut "github.com/ben-han-cn/cement/unittest"
-	err "github.com/ben-han-cn/gorest/error"
+	ut "github.com/zdnscloud/cement/unittest"
+	err "github.com/zdnscloud/gorest/error"
 )
 
 type dumbHandlerTwo struct{}

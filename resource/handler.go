@@ -5,7 +5,7 @@ import (
 	"net/http"
 	"reflect"
 
-	goresterr "github.com/ben-han-cn/gorest/error"
+	goresterr "github.com/zdnscloud/gorest/error"
 )
 
 const (

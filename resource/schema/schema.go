@@ -7,9 +7,10 @@ import (
 	"path"
 	"reflect"
 
-	goresterr "github.com/ben-han-cn/gorest/error"
-	"github.com/ben-han-cn/gorest/resource"
-	"github.com/ben-han-cn/gorest/resource/schema/resourcefield"
+	goresterr "github.com/zdnscloud/gorest/error"
+	"github.com/zdnscloud/gorest/resource"
+	"github.com/zdnscloud/gorest/resource/schema/resourcedoc"
+	"github.com/zdnscloud/gorest/resource/schema/resourcefield"
 )
 
 type Schema struct {
@@ -114,7 +115,9 @@ func (s *Schema) validateAndFillResource(r resource.Resource, method, action str
 			r.SetAction(action_)
 		}
 	} else if method == http.MethodPost || method == http.MethodPut {
-		//fields could be nil, when no any rest rag is specified in struct field
+		if body != nil {
+			json.Unmarshal(body, r)
+		}
 		if s.fields != nil {
 			objMap := make(map[string]interface{})
 			if body != nil {
@@ -122,15 +125,7 @@ func (s *Schema) validateAndFillResource(r resource.Resource, method, action str
 					return goresterr.NewAPIError(goresterr.InvalidBodyContent, fmt.Sprintf("request body isn't a string map:%s", err.Error()))
 				}
 			}
-			if err := s.fields.CheckRequired(objMap); err != nil {
-				return goresterr.NewAPIError(goresterr.InvalidBodyContent, err.Error())
-			}
-		}
-		if body != nil {
-			json.Unmarshal(body, r)
-		}
-		if s.fields != nil {
-			if err := s.fields.Validate(r); err != nil {
+			if err := s.fields.Validate(r, objMap); err != nil {
 				return goresterr.NewAPIError(goresterr.InvalidBodyContent, err.Error())
 			}
 		}
@@ -303,4 +298,16 @@ func (s *Schema) generateResourceLinks(r resource.Resource, parentLink string) m
 		links[resource.ResourceLinkType(childName)] = resource.ResourceLink(path.Join(selfLink, childName))
 	}
 	return links
+}
+
+func (s *Schema) WriteJsonDoc(path string) error {
+	var parents []string
+	for _, parent := range s.resourceKind.GetParents() {
+		parents = append(parents, resource.DefaultKindName(parent))
+	}
+	resource, err := resourcedoc.NewResourceDocument(s.resourceKindName, s.resourceKind, s.handler, parents)
+	if err != nil {
+		return err
+	}
+	return resource.WriteJsonFile(path)
 }

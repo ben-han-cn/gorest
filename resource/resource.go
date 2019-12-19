@@ -5,7 +5,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/ben-han-cn/gorest/util"
+	"github.com/zdnscloud/gorest/util"
 )
 
 type ResourceLinkType string
@@ -30,6 +30,9 @@ type Resource interface {
 
 	GetCreationTimestamp() time.Time
 	SetCreationTimestamp(time.Time)
+
+	GetDeletionTimestamp() time.Time
+	SetDeletionTimestamp(time.Time)
 
 	GetSchema() Schema
 	SetSchema(Schema)
