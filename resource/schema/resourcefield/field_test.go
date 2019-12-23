@@ -240,6 +240,7 @@ func TestValidate(t *testing.T) {
 		StringStringMap map[string]string        `json:"stringStringMap,omitempty" rest:"isDomain=true"`
 
 		PtrStruct *IncludeStruct `json:"ptrStruct" rest:"required=true"`
+		Struct    IncludeStruct  `json:"struct" rest:"description=immutable"`
 	}
 
 	builder := NewBuilder()
@@ -270,10 +271,20 @@ func TestValidate(t *testing.T) {
 		PtrStruct: &IncludeStruct{
 			Int8WithRange: 5,
 		},
+		Struct: IncludeStruct{
+			Int8WithRange: 19,
+		},
 	}
 	rawByte, _ := json.Marshal(ts)
 	raw := make(map[string]interface{})
 	json.Unmarshal(rawByte, &raw)
+	err = sf.Validate(ts, raw)
+	ut.Assert(t, sf.Validate(ts, raw) == nil, "get err %v", err)
+
+	//optional struct
+	raw = make(map[string]interface{})
+	json.Unmarshal(rawByte, &raw)
+	delete(raw, "struct")
 	ut.Assert(t, sf.Validate(ts, raw) == nil, "")
 
 	//intslice with min-max
@@ -337,4 +348,31 @@ func makeSureValidateFailedWithInfo(t *testing.T, sf Field, structVal interface{
 	err := sf.Validate(structVal, raw)
 	ut.Assert(t, err != nil, "want err %s", errorInfo)
 	ut.Assert(t, strings.Contains(err.Error(), errorInfo), "")
+}
+
+func _TestClusterResource(t *testing.T) {
+	type ClusterNetwork struct {
+		Plugin string `json:"plugin" rest:"options=flannel|calico"`
+		Iface  string `json:"iface"`
+	}
+
+	type Cluster struct {
+		Network ClusterNetwork `json:"network" rest:"description=immutable"`
+	}
+
+	builder := NewBuilder()
+	sf, err := builder.Build(reflect.TypeOf(Cluster{}))
+	ut.Assert(t, err == nil, "")
+
+	ts := Cluster{
+		Network: ClusterNetwork{
+			Plugin: "flannel",
+		},
+	}
+	rawByte, _ := json.Marshal(ts)
+	raw := make(map[string]interface{})
+	json.Unmarshal(rawByte, &raw)
+	delete(raw, "network")
+	err = sf.Validate(ts, raw)
+	ut.Assert(t, err == nil, "shouldn't get err %v", err)
 }
