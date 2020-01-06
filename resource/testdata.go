@@ -2,7 +2,7 @@ package resource
 
 import (
 	"github.com/zdnscloud/cement/uuid"
-	"github.com/zdnscloud/gorest/error"
+	"github.com/ben-han-cn/gorest/error"
 )
 
 type dumbResource struct {

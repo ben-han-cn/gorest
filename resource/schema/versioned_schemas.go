@@ -6,8 +6,8 @@ import (
 	"regexp"
 	"strings"
 
-	goresterr "github.com/zdnscloud/gorest/error"
-	"github.com/zdnscloud/gorest/resource"
+	goresterr "github.com/ben-han-cn/gorest/error"
+	"github.com/ben-han-cn/gorest/resource"
 )
 
 type VersionedSchemas struct {

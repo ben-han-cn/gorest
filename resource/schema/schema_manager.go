@@ -5,8 +5,8 @@ import (
 	"io/ioutil"
 	"net/http"
 
-	goresterr "github.com/zdnscloud/gorest/error"
-	"github.com/zdnscloud/gorest/resource"
+	goresterr "github.com/ben-han-cn/gorest/error"
+	"github.com/ben-han-cn/gorest/resource"
 )
 
 type SchemaManager struct {
@@ -89,19 +89,6 @@ func (m *SchemaManager) GenerateResourceRoute() resource.ResourceRoute {
 		route = route.Merge(vs.GenerateResourceRoute())
 	}
 	return route
-}
-
-func (m *SchemaManager) WriteJsonDocs(v *resource.APIVersion, path string) error {
-	vs := m.getVersionedSchemas(v)
-	if vs == nil {
-		vs = NewVersionedSchemas(v)
-	}
-	for _, schema := range getSchemas(vs) {
-		if err := schema.WriteJsonDoc(path); err != nil {
-			return err
-		}
-	}
-	return nil
 }
 
 func getSchemas(vs *VersionedSchemas) []*Schema {

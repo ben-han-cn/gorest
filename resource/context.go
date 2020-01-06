@@ -6,7 +6,7 @@ import (
 	"net/url"
 	"strings"
 
-	"github.com/zdnscloud/gorest/error"
+	"github.com/ben-han-cn/gorest/error"
 )
 
 const (

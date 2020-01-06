@@ -1,7 +1,7 @@
 package validator
 
 import (
-	"github.com/zdnscloud/gorest/util"
+	"github.com/ben-han-cn/gorest/util"
 )
 
 type Validator interface {

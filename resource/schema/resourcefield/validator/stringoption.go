@@ -6,7 +6,7 @@ import (
 	"strings"
 
 	"github.com/zdnscloud/cement/slice"
-	"github.com/zdnscloud/gorest/util"
+	"github.com/ben-han-cn/gorest/util"
 )
 
 const (

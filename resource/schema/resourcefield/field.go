@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"reflect"
 
-	"github.com/zdnscloud/gorest/resource/schema/resourcefield/validator"
+	"github.com/ben-han-cn/gorest/resource/schema/resourcefield/validator"
 )
 
 type Field interface {

@@ -1,7 +1,7 @@
 package resource
 
 import (
-	goresterr "github.com/zdnscloud/gorest/error"
+	goresterr "github.com/ben-han-cn/gorest/error"
 	"net/http"
 )
 
@@ -18,12 +18,10 @@ type SchemaManager interface {
 
 	//based on handler to generate route for the resources
 	GenerateResourceRoute() ResourceRoute
-	WriteJsonDocs(v *APIVersion, path string) error
 }
 
 type Schema interface {
 	GetHandler() Handler
 	AddLinksToResource(r Resource, httpSchemeAndHost string) error
 	AddLinksToResourceCollection(rs *ResourceCollection, httpSchemeAndHost string) error
-	WriteJsonDoc(path string) error
 }
