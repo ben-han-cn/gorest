@@ -7,12 +7,12 @@ import (
 	"sync"
 	"time"
 
-	"github.com/gin-gonic/gin"
 	"github.com/ben-han-cn/gorest"
 	"github.com/ben-han-cn/gorest/adaptor"
 	goresterr "github.com/ben-han-cn/gorest/error"
 	"github.com/ben-han-cn/gorest/resource"
 	"github.com/ben-han-cn/gorest/resource/schema"
+	"github.com/gin-gonic/gin"
 )
 
 var (
@@ -39,7 +39,7 @@ type Node struct {
 	IsWorker              bool   `json:"isWorker"`
 }
 
-func (c Cluster) CreateActions(name string) *resource.Action {
+func (c Cluster) CreateAction(name string) *resource.Action {
 	switch name {
 	case "encode":
 		return &resource.Action{
@@ -272,7 +272,7 @@ func (h *nodeHandler) List(ctx *resource.Context) interface{} {
 	return h.clusters.GetNodes(node.GetParent().GetID())
 }
 
-func (h *nodeHandler) Get(ctx *resource.Context) interface{} {
+func (h *nodeHandler) Get(ctx *resource.Context) resource.Resource {
 	node := ctx.Resource.(*Node)
 	return h.clusters.GetNode(node.GetParent().GetID(), node.GetID())
 }
